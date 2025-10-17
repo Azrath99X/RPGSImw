@@ -1,0 +1,48 @@
+# This file is for ignoring Unity-generated files and folders.
+# It's a good idea to start with this template for any new Unity project.
+
+# Unity-specific folders
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+
+# MemoryCaptures can be huge
+/[Mm]emoryCaptures/
+
+# Asset meta files should be ignored for specific asset types
+*.pidb
+*.suo
+*.sln.docstates
+
+# Visual Studio / Rider generated files
+.vs/
+.idea/
+*.sln
+*.csproj
+*.unityproj
+*.ncrunch*
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# Unity3D generated meta files
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+
+# Unity3D Generated File On Crash Reports
+sysinfo.txt
+crash.dmp
+error.log
