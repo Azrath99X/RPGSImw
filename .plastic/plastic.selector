@@ -1,0 +1,4 @@
+repository "RPGSIm/RPGsim@18967747364292@cloud"
+  path "/"
+    br "/main"
+    co "/main"

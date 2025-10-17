@@ -1,0 +1,106 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Project\\RPGSIm\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{1E77769D-D66E-20DB-0159-C76E3C4A7911}|Assembly-CSharp.csproj|d:\\project\\rpgsim\\assets\\script\\ui\\ui_dialogue.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1E77769D-D66E-20DB-0159-C76E3C4A7911}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\ui\\ui_dialogue.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1E77769D-D66E-20DB-0159-C76E3C4A7911}|Assembly-CSharp.csproj|d:\\project\\rpgsim\\assets\\script\\interactiveobject\\object_desta.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1E77769D-D66E-20DB-0159-C76E3C4A7911}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\interactiveobject\\object_desta.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1E77769D-D66E-20DB-0159-C76E3C4A7911}|Assembly-CSharp.csproj|d:\\project\\rpgsim\\assets\\script\\ui\\ui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1E77769D-D66E-20DB-0159-C76E3C4A7911}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\ui\\ui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1E77769D-D66E-20DB-0159-C76E3C4A7911}|Assembly-CSharp.csproj|d:\\project\\rpgsim\\assets\\script\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1E77769D-D66E-20DB-0159-C76E3C4A7911}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1E77769D-D66E-20DB-0159-C76E3C4A7911}|Assembly-CSharp.csproj|d:\\project\\rpgsim\\assets\\script\\interface\\iinteractable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1E77769D-D66E-20DB-0159-C76E3C4A7911}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\interface\\iinteractable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Player.cs",
+              "DocumentMoniker": "D:\\Project\\RPGSIm\\Assets\\Script\\Player.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\Player.cs",
+              "ToolTip": "D:\\Project\\RPGSIm\\Assets\\Script\\Player.cs",
+              "RelativeToolTip": "Assets\\Script\\Player.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAiwEUAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-11T16:53:41.948Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "UI.cs",
+              "DocumentMoniker": "D:\\Project\\RPGSIm\\Assets\\Script\\UI\\UI.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\UI\\UI.cs",
+              "ToolTip": "D:\\Project\\RPGSIm\\Assets\\Script\\UI\\UI.cs",
+              "RelativeToolTip": "Assets\\Script\\UI\\UI.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-11T17:17:45.309Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "UI_Dialogue.cs",
+              "DocumentMoniker": "D:\\Project\\RPGSIm\\Assets\\Script\\UI\\UI_Dialogue.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\UI\\UI_Dialogue.cs",
+              "ToolTip": "D:\\Project\\RPGSIm\\Assets\\Script\\UI\\UI_Dialogue.cs",
+              "RelativeToolTip": "Assets\\Script\\UI\\UI_Dialogue.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-11T17:17:37.906Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Object_Desta.cs",
+              "DocumentMoniker": "D:\\Project\\RPGSIm\\Assets\\Script\\InteractiveObject\\Object_Desta.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\InteractiveObject\\Object_Desta.cs",
+              "ToolTip": "D:\\Project\\RPGSIm\\Assets\\Script\\InteractiveObject\\Object_Desta.cs",
+              "RelativeToolTip": "Assets\\Script\\InteractiveObject\\Object_Desta.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-11T16:46:57.442Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "IInteractable.cs",
+              "DocumentMoniker": "D:\\Project\\RPGSIm\\Assets\\Script\\Interface\\IInteractable.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\Interface\\IInteractable.cs",
+              "ToolTip": "D:\\Project\\RPGSIm\\Assets\\Script\\Interface\\IInteractable.cs",
+              "RelativeToolTip": "Assets\\Script\\Interface\\IInteractable.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-11T16:46:53.03Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
