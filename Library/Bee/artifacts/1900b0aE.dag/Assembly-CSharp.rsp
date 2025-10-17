@@ -456,6 +456,8 @@
 "Assets/Script/NPC/NPCInteraction.cs"
 "Assets/Script/NPC/Npc_Desta.cs"
 "Assets/Script/Player.cs"
+"Assets/Script/Scene/AreaTeleporter.cs"
+"Assets/Script/Scene/TransitionManager.cs"
 "Assets/Script/scriptableObjects/ItemData.cs"
 "Assets/Script/TileManager.cs"
 "Assets/Script/UI/Inventory_Ui.cs"
