@@ -8,6 +8,8 @@ public class TileManager : MonoBehaviour
     [SerializeField] private Tilemap interactableTile;
     [SerializeField] private Tile hiddenInteractableTile;
     [SerializeField] private Tile plowedTile;   
+    [SerializeField] private Tile wateredTile;   
+
     void Start()
     {
         foreach (var pos in interactableTile.cellBounds.allPositionsWithin)
@@ -36,6 +38,32 @@ public class TileManager : MonoBehaviour
         }
         return "";
     }
+
+    public void WaterTile(Vector3Int position)
+    {
+        // Cek apakah ubin di posisi itu adalah ubin bajakan kering
+        string tileName = GetTileName(position);
+        
+        // Pastikan plowedTile tidak null sebelum mengakses .name
+        if (plowedTile != null && tileName == "Sowed tanah iyeah (updated0.1)")
+        {
+            interactableTile.SetTile(position, wateredTile);
+            Debug.Log($"Menyiram ubin di {position}");
+        }
+    }
+
+    public Vector3Int WorldToCell(Vector3 worldPosition)
+    {
+        return interactableTile.WorldToCell(worldPosition);
+    }
+
+    public Vector3 GetCellCenter(Vector3Int gridPosition)
+    {
+        return interactableTile.GetCellCenterWorld(gridPosition);
+    }
+
+
+    
 
 
 }
