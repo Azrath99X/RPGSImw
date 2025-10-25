@@ -99,6 +99,147 @@ public class Inventory
         }
     }
 
+    public void Add(Item item, int amountToAdd)
+    {
+        if (item == null || amountToAdd <= 0) return;
+
+        int amountLeft = amountToAdd;
+
+        // 1. Coba isi tumpukan (stack) yang ada terlebih dahulu
+        foreach (Slot slot in slots)
+        {
+            if (amountLeft <= 0) break; // Semua item sudah ditempatkan
+
+            // Cek jika slot ini berisi item yang sama dan belum penuh
+            if (!slot.isEmpty && slot.itemName == item.data.itemName && slot.count < slot.maxCount)
+            {
+                int spaceAvailable = slot.maxCount - slot.count;
+                int amountToMove = Mathf.Min(amountLeft, spaceAvailable);
+
+                slot.count += amountToMove;
+                amountLeft -= amountToMove;
+            }
+        }
+
+        // 2. Jika masih ada sisa, cari slot kosong
+        if (amountLeft > 0)
+        {
+            foreach (Slot slot in slots)
+            {
+                if (amountLeft <= 0) break; // Semua item sudah ditempatkan
+
+                if (slot.isEmpty)
+                {
+                    // Konfigurasi slot untuk item baru
+                    slot.itemName = item.data.itemName;
+                    slot.icon = item.data.icon;
+                    // (Anda mungkin perlu mengatur maxCount di sini jika berbeda per item)
+                    // slot.maxCount = data.maxStack; 
+
+                    int amountToMove = Mathf.Min(amountLeft, slot.maxCount);
+                    
+                    slot.count = amountToMove; // Set jumlahnya
+                    amountLeft -= amountToMove;
+                }
+            }
+        }
+        
+        // 3. (Opsional) Jika masih ada sisa, berarti inventaris penuh
+        if (amountLeft > 0)
+        {
+            Debug.LogWarning($"Inventaris penuh. Gagal menambahkan {amountLeft}x {item.data.itemName}.");
+        }
+    }
+
+    // Check if inventory can accommodate the specified amount of items
+    public bool CanAdd(ItemData itemData, int amountToAdd)
+    {
+        if (itemData == null || amountToAdd <= 0) return false;
+
+        int amountLeft = amountToAdd;
+
+        // Check existing stacks first
+        foreach (Slot slot in slots)
+        {
+            if (amountLeft <= 0) break;
+
+            if (!slot.isEmpty && slot.itemName == itemData.itemName && slot.count < slot.maxCount)
+            {
+                int spaceAvailable = slot.maxCount - slot.count;
+                amountLeft -= Mathf.Min(amountLeft, spaceAvailable);
+            }
+        }
+
+        // Check empty slots
+        if (amountLeft > 0)
+        {
+            foreach (Slot slot in slots)
+            {
+                if (amountLeft <= 0) break;
+
+                if (slot.isEmpty)
+                {
+                    amountLeft -= Mathf.Min(amountLeft, slot.maxCount);
+                }
+            }
+        }
+
+        return amountLeft <= 0;
+    }
+
+    // Overloaded method to add items directly from ItemData (for dialogue system)
+    public void Add(ItemData itemData, int amountToAdd)
+    {
+        if (itemData == null || amountToAdd <= 0) return;
+
+        int amountLeft = amountToAdd;
+
+        // 1. Coba isi tumpukan (stack) yang ada terlebih dahulu
+        foreach (Slot slot in slots)
+        {
+            if (amountLeft <= 0) break; // Semua item sudah ditempatkan
+
+            // Cek jika slot ini berisi item yang sama dan belum penuh
+            if (!slot.isEmpty && slot.itemName == itemData.itemName && slot.count < slot.maxCount)
+            {
+                int spaceAvailable = slot.maxCount - slot.count;
+                int amountToMove = Mathf.Min(amountLeft, spaceAvailable);
+
+                slot.count += amountToMove;
+                amountLeft -= amountToMove;
+            }
+        }
+
+        // 2. Jika masih ada sisa, cari slot kosong
+        if (amountLeft > 0)
+        {
+            foreach (Slot slot in slots)
+            {
+                if (amountLeft <= 0) break; // Semua item sudah ditempatkan
+
+                if (slot.isEmpty)
+                {
+                    // Konfigurasi slot untuk item baru
+                    slot.itemName = itemData.itemName;
+                    slot.icon = itemData.icon;
+                    // (Anda mungkin perlu mengatur maxCount di sini jika berbeda per item)
+                    // slot.maxCount = data.maxStack; 
+
+                    int amountToMove = Mathf.Min(amountLeft, slot.maxCount);
+                    
+                    slot.count = amountToMove; // Set jumlahnya
+                    amountLeft -= amountToMove;
+                }
+            }
+        }
+        
+        // 3. (Opsional) Jika masih ada sisa, berarti inventaris penuh
+        if (amountLeft > 0)
+        {
+            Debug.LogWarning($"Inventaris penuh. Gagal menambahkan {amountLeft}x {itemData.itemName}.");
+        }
+    }
+
     public void Remove(int index)
     {
         slots[index].removeItem();

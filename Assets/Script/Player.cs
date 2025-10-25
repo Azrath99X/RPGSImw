@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -10,8 +7,8 @@ public class Player : MonoBehaviour
     public TileManager tileManager;
 
     [Header("Interaction")]
-    public float interactionRange = 2f; // Range untuk IInteractable
-    public float tileInteractionDistance = 1.0f; // Jarak untuk cangkul
+    public float interactionRange = 2f; 
+    public float tileInteractionDistance = 1.0f; 
 
     [Header("Indicator")]
     [Tooltip("Seret GameObject 'TileIndicator' Anda ke sini")]
@@ -19,7 +16,13 @@ public class Player : MonoBehaviour
 
     private IInteractable currentInteractable; 
     private Vector2 lastDirection = Vector2.down; 
-    private Vector3Int lastTargetGridPos; // Menyimpan posisi grid terakhir
+    private Vector3Int lastTargetGridPos; 
+
+    // Ganti nama-nama ini agar SAMA PERSIS dengan nama item di Inventory Anda
+    private const string HOE_ITEM_NAME = "Hoe";
+    private const string WATERING_CAN_ITEM_NAME = "WateringCan";
+    private const string SEED_ITEM_NAME = "TurnipSeed"; // Ganti jika nama benih Anda beda
+
 
     private void Awake()
     {
@@ -29,33 +32,22 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        if (GameManager.Instance != null)
-        {
+        if (GameManager.Instance != null && GameManager.Instance.tileManager != null)
             tileManager = GameManager.Instance.tileManager;
-        }
         else
-        {
-            Debug.LogError("GameManager.Instance not found!");
-        }
+            tileManager = TileManager.Instance; 
 
-        if (tileIndicator != null)
-        {
-            tileIndicator.SetActive(false); // Pastikan indikator mati saat mulai
-        }
+        if (tileManager == null) Debug.LogError("TileManager tidak ditemukan!");
+        if (tileIndicator != null) tileIndicator.SetActive(false);
     }
 
     private void Update()
     {
-        // 1. Tentukan arah hadap pemain
+        if (tileManager == null || inventory == null || animator == null) return;
+
         HandleDirection();
-        
-        // 2. Perbarui posisi dan visibilitas indikator ubin
         UpdateTileIndicator();
-
-        // 3. Cek input untuk membajak (tombol E)
-        HandlePlowInput();
-
-        // 4. Cek input untuk interaksi objek (tombol F)
+        HandleToolInput();
         HandleInteractInput();
     }
 
@@ -75,63 +67,76 @@ public class Player : MonoBehaviour
 
     private void UpdateTileIndicator()
     {
-        if (tileManager == null || tileIndicator == null || inventory == null) return;
+        if (tileIndicator == null) return;
 
-        // Tentukan ubin target
         Vector3 targetWorldPos = transform.position + (Vector3)lastDirection * tileInteractionDistance;
-        Vector3Int targetGridPos = tileManager.WorldToCell(targetWorldPos);
-        
-        // Simpan posisi ini untuk digunakan oleh HandlePlowInput()
-        lastTargetGridPos = targetGridPos; 
+        lastTargetGridPos = tileManager.WorldToCell(targetWorldPos);
+        tileIndicator.transform.position = tileManager.GetCellCenter(lastTargetGridPos);
 
-        // Tentukan posisi tengah ubin
-        Vector3 cellCenterPos = tileManager.GetCellCenter(targetGridPos);
-        tileIndicator.transform.position = cellCenterPos;
-
-        // Cek apakah kita bisa berinteraksi dengan ubin ini
+        // --- Logika Menampilkan Indikator ---
         string currentItem = inventory.toolbar.selectedSlot.itemName;
-        string targetTileName = tileManager.GetTileName(targetGridPos);
+        string targetTileName = tileManager.GetTileName(lastTargetGridPos);
+        
+        bool canPlow = (currentItem == HOE_ITEM_NAME && targetTileName == tileManager.GetHiddenTileName());
+        
+        // DIPERBARUI: Sekarang cek semua tahap kering
+        bool canWater = (currentItem == WATERING_CAN_ITEM_NAME && 
+                        (targetTileName == tileManager.GetPlowedTileName() || 
+                         targetTileName == tileManager.GetSeededTileName() || 
+                         targetTileName == tileManager.GetSproutTileName() ||
+                         targetTileName == tileManager.GetGrowthDay2DryName() || // BARU
+                         targetTileName == tileManager.GetGrowthDay3DryName() )); // BARU
+        
+        bool canPlant = (currentItem == SEED_ITEM_NAME && 
+                        (targetTileName == tileManager.GetPlowedTileName() || 
+                         targetTileName == tileManager.GetWetPlowedTileName()));
 
-        bool canPlow = (targetTileName == "Interactable_" && currentItem == "Hoe");
-        bool canWater = (targetTileName == "Sowed tanah iyeah (updated0.1)" && currentItem == "WateringCan");
-
-        // Tampilkan atau sembunyikan indikator
-        if (canPlow || canWater)
-        {
+        if (canPlow || canWater || canPlant)
             tileIndicator.SetActive(true);
-        }
         else
-        {
             tileIndicator.SetActive(false);
-        }
     }
 
-    private void HandlePlowInput()
+    private void HandleToolInput()
     {
-        // Cek 'E' DAN apakah indikator sedang aktif (berarti valid)
         if (Input.GetKeyDown(KeyCode.E) && tileIndicator.activeSelf)
         {
             string currentItem = inventory.toolbar.selectedSlot.itemName;
             
-            // Cek sekali lagi untuk alat yang benar (jika indikator dipakai >1 alat)
-            if (currentItem == "Hoe")
+            if (currentItem == HOE_ITEM_NAME)
             {
                 animator.SetTrigger("IsPlowing");
-                // Kita gunakan 'lastTargetGridPos' yang sudah dihitung
                 tileManager.evolveTile(lastTargetGridPos); 
             }
-            else if (currentItem == "WateringCan")
+            else if (currentItem == WATERING_CAN_ITEM_NAME) 
             {
-                animator.SetTrigger("IsWatering");
                 tileManager.WaterTile(lastTargetGridPos);
+            }
+            else if (currentItem == SEED_ITEM_NAME)
+            {
+                bool success = tileManager.PlantSeed(lastTargetGridPos);
+                if (success)
+                {
+                    // TODO: Kurangi benih dari inventory
+                }
             }
         }
     }
 
     private void HandleInteractInput()
     {
+        // Interaksi Tombol F untuk objek IInteractable
         if (Input.GetKeyDown(KeyCode.F))
         {
+            // Cek dulu apakah dialog sedang berjalan
+            if (DialogueManager.Instance != null && DialogueManager.Instance.IsDialogueActive)
+            {
+                // Jika ya, lanjutkan dialognya
+                DialogueManager.Instance.AdvanceConversation();
+                return; // Hentikan fungsi di sini
+            }
+
+            // Jika dialog tidak berjalan, baru cari interaksi baru
             Transform closest = null;
             float ClosestDistance = Mathf.Infinity;
             Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, interactionRange);
@@ -154,8 +159,7 @@ public class Player : MonoBehaviour
             closest.GetComponent<IInteractable>().Interact(); 
         }
     }
-
-    // --- (Fungsi dropItem Anda tidak perlu diubah) ---
+    // --- Fungsi Drop Item ---
     public void dropItem(Item item)
     {
         Vector2 spawnLocation = transform.position;

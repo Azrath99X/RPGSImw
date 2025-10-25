@@ -99,4 +99,32 @@ public class TransitionManager : MonoBehaviour
             fadePanelCanvasGroup.blocksRaycasts = false;
         }
     }
+
+    public IEnumerator Fade(float targetAlpha, float duration)
+    {
+        if (fadePanelCanvasGroup == null)
+        {
+            Debug.LogWarning("FadePanel CanvasGroup tidak di-set di TransitionManager!");
+            yield break;
+        }
+
+        fadePanelCanvasGroup.blocksRaycasts = true;
+        
+        float startAlpha = fadePanelCanvasGroup.alpha;
+        float timer = 0f;
+
+        while (timer < duration)
+        {
+            timer += Time.deltaTime;
+            fadePanelCanvasGroup.alpha = Mathf.Lerp(startAlpha, targetAlpha, timer / duration);
+            yield return null;
+        }
+
+        fadePanelCanvasGroup.alpha = targetAlpha;
+
+        if (targetAlpha == 0f)
+        {
+            fadePanelCanvasGroup.blocksRaycasts = false;
+        }
+    }
 }
