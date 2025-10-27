@@ -1364,10 +1364,12 @@ m_ResolvedPackages:
     - 1.9.6
     - 1.9.7
     - 1.9.8
+    - 1.9.9
     compatible:
     - 1.9.7
     - 1.9.8
-    recommended: 1.9.8
+    - 1.9.9
+    recommended: 1.9.9
     deprecated:
     - 1.8.0-pre.1
   dependencies:
@@ -4442,6 +4444,7 @@ m_ResolvedPackages:
     - 12.0.2
     - 13.0.0
     - 13.0.1
+    - 14.0.0
     compatible:
     - 12.0.2
     recommended: 12.0.2
@@ -4767,6 +4770,7 @@ m_ResolvedPackages:
     - 11.0.0
     - 11.0.1
     - 12.0.0
+    - 13.0.0
     compatible:
     - 11.0.1
     recommended: 11.0.1
@@ -5061,6 +5065,7 @@ m_ResolvedPackages:
     - 12.0.0
     - 12.0.1
     - 13.0.0
+    - 14.0.0
     compatible:
     - 12.0.1
     recommended: 12.0.1
@@ -5332,6 +5337,7 @@ m_ResolvedPackages:
     - 5.0.1
     - 6.0.0
     - 6.0.1
+    - 7.0.0
     compatible:
     - 5.0.1
     recommended: 5.0.1
@@ -5462,6 +5468,7 @@ m_ResolvedPackages:
     - 2.0.2
     - 3.0.0
     - 3.0.1
+    - 4.0.0
     compatible:
     - 2.0.1
     - 2.0.2
@@ -5653,6 +5660,7 @@ m_ResolvedPackages:
     - 11.0.1
     - 12.0.0
     - 12.0.1
+    - 13.0.0
     compatible:
     - 11.0.1
     recommended: 11.0.1

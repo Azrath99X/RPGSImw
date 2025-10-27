@@ -125,6 +125,10 @@ public class Player : MonoBehaviour
 
     private void HandleInteractInput()
     {
+        if (ExplorationModeManager.Instance != null && ExplorationModeManager.Instance.IsExploring)
+    {
+        return;
+    }
         // Interaksi Tombol F untuk objek IInteractable
         if (Input.GetKeyDown(KeyCode.F))
         {
