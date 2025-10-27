@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public TileManager tileManager;
     public UIManager uiManager;
 
+
     public void Awake()
     {
         if (Instance != null == Instance != this)
@@ -28,5 +29,6 @@ public class GameManager : MonoBehaviour
         tileManager = GetComponent<TileManager>();
         player = FindObjectOfType<Player>();
         uiManager = GetComponent<UIManager>();
-        } 
+        
+    } 
 }
