@@ -101,4 +101,70 @@ public bool HasItem(string itemName)
         }
         return null;
     }
+
+    public void LoadInventories(Inventory backpackData, Inventory toolbarData)
+    {
+        // Jangan ganti referensi, tapi salin datanya
+        // Pastikan ukuran slotnya cocok
+        if (this.backpack.slots.Count != backpackData.slots.Count)
+        {
+            Debug.LogWarning("Ukuran backpack di save data tidak cocok!");
+        }
+        if (this.toolbar.slots.Count != toolbarData.slots.Count)
+        {
+            Debug.LogWarning("Ukuran toolbar di save data tidak cocok!");
+        }
+
+        // Salin slot backpack
+        for (int i = 0; i < this.backpack.slots.Count; i++)
+        {
+            if (i < backpackData.slots.Count)
+            {
+                this.backpack.slots[i] = backpackData.slots[i];
+
+                Inventory.Slot loadedSlot = this.backpack.slots[i];
+            if (!loadedSlot.isEmpty)
+            {
+                // Cari item prefab berdasarkan nama yang tersimpan
+                Item itemPrefab = GameManager.Instance.itemManager.GetItem(loadedSlot.itemName); 
+                if (itemPrefab != null)
+                {
+                    // Set icon-nya dari prefab
+                    loadedSlot.icon = itemPrefab.data.icon; 
+                }
+                else
+                {
+                    Debug.LogWarning($"Icon tidak ditemukan untuk item: {loadedSlot.itemName}");
+                }
+            }
+            }
+        }
+
+        // Salin slot toolbar
+        for (int i = 0; i < this.toolbar.slots.Count; i++)
+        {
+            if (i < toolbarData.slots.Count)
+            {
+                this.toolbar.slots[i] = toolbarData.slots[i];
+
+                // --- LOGIKA BARU: "Re-hydrate" Icon ---
+                Inventory.Slot loadedSlot = this.toolbar.slots[i];
+                if (!loadedSlot.isEmpty)
+                {
+                    Item itemPrefab = GameManager.Instance.itemManager.GetItem(loadedSlot.itemName);
+                    if (itemPrefab != null)
+                    {
+                        loadedSlot.icon = itemPrefab.data.icon;
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"Icon tidak ditemukan untuk item: {loadedSlot.itemName}");
+                    }
+                }
+            }
+        }
+            this.toolbar.SelectSlot(0);
+
+        Debug.Log("[SaveData] Berhasil load data Inventory.");
+    }
 }

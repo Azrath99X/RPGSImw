@@ -74,7 +74,18 @@ public class Player : MonoBehaviour
         tileIndicator.transform.position = tileManager.GetCellCenter(lastTargetGridPos);
 
         // --- Logika Menampilkan Indikator ---
-        string currentItem = inventory.toolbar.selectedSlot.itemName;
+
+        // --- PERBAIKAN: Tambahkan cek ini ---
+        if (inventory.toolbar.selectedSlot == null)
+        {
+            // Jika slot belum dipilih (terjadi di frame pertama),
+            // sembunyikan indikator dan keluar dari fungsi.
+            tileIndicator.SetActive(false);
+            return; 
+        }
+        // --- AKHIR PERBAIKAN ---
+
+        string currentItem = inventory.toolbar.selectedSlot.itemName; // Baris ini sekarang aman
         string targetTileName = tileManager.GetTileName(lastTargetGridPos);
         
         bool canPlow = (currentItem == HOE_ITEM_NAME && targetTileName == tileManager.GetHiddenTileName());
