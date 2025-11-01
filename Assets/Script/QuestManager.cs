@@ -2,13 +2,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;       
 
 public class QuestManager : MonoBehaviour
 {
     public static QuestManager Instance { get; private set; }
-
+    public static event Action<Quest> OnQuestStarted;
     public List<Quest> activeQuests = new List<Quest>();
     public List<Quest> completedQuests = new List<Quest>(); // <-- TAMBAHKAN INI
+
+    [Header("Quest Database")]
+    [Tooltip("Seret SEMUA aset Questable Object ke sini")]
+    public List<Quest> allQuestsInGame;
+
+
     
     void Awake()
     {
@@ -25,6 +32,8 @@ public class QuestManager : MonoBehaviour
         quest.isComplete = false; // Pastikan disetel ulang
         activeQuests.Add(quest);
         // Panggil UI Quest Log di sini
+
+        OnQuestStarted?.Invoke(quest);
     }
 
     // Fungsi baru untuk menyelesaikan quest dengan ASET
@@ -78,4 +87,31 @@ public class QuestManager : MonoBehaviour
             }
         }
     }
+
+    public void LoadQuestData(List<string> activeIDs, List<string> completedIDs)
+{
+    activeQuests.Clear();
+    completedQuests.Clear();
+
+    foreach (string id in activeIDs)
+    {
+        Quest q = allQuestsInGame.Find(quest => quest.questID == id);
+        if (q != null)
+        {
+            q.isComplete = false; // Pastikan statusnya benar
+            activeQuests.Add(q);
+        }
+    }
+
+    foreach (string id in completedIDs)
+    {
+        Quest q = allQuestsInGame.Find(quest => quest.questID == id);
+        if (q != null)
+        {
+            q.isComplete = true; // Pastikan statusnya benar
+            completedQuests.Add(q);
+        }
+    }
+    Debug.Log($"[SaveData] Berhasil load {activeQuests.Count} quest aktif dan {completedQuests.Count} quest selesai.");
+}
 }

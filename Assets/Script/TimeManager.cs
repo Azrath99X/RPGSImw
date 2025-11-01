@@ -94,4 +94,10 @@ public class TimeManager : MonoBehaviour
         // else if (CurrentDay == 5) { // Festival Dimulai }
         // else if (CurrentDay % 7 == 0) { // Event mingguan }
     }
+
+    public void LoadDay(int day)
+    {
+        CurrentDay = day;
+        Debug.Log($"[SaveData] Berhasil load ke Hari {CurrentDay}");
+    }
 }

@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using System.Collections.Generic; // Diperlukan untuk Dictionary
+using System.IO; // Tambahkan ini di paling atas
+using System.Linq; // Tambahkan ini di paling atas
 
 public class TileManager : MonoBehaviour
 {
@@ -28,6 +30,11 @@ public class TileManager : MonoBehaviour
     [SerializeField] private Tile growthDay3Wet; // Hari 3 (Basah) - BARU
     [SerializeField] private Tile matureTile; // Hari 4 (Dewasa)
 
+    private Dictionary<string, TileBase> tileAssetsByName;
+    private bool isTileDatabaseInitialized = false;
+
+    
+
     // Daftar untuk menyimpan perubahan agar tidak konflik saat iterasi
     private Dictionary<Vector3Int, TileBase> tileChanges = new Dictionary<Vector3Int, TileBase>();
 
@@ -35,6 +42,8 @@ public class TileManager : MonoBehaviour
     {
         if (Instance != null && Instance != this) Destroy(gameObject);
         else Instance = this;
+
+        InitializeTileDatabase(); // Panggil fungsi baru ini
     }
 
     void Start()
@@ -194,7 +203,83 @@ public class TileManager : MonoBehaviour
     {
         return interactableTile.GetCellCenterWorld(gridPosition);
     }
+
+    private void InitializeTileDatabase()
+    {
+        if (isTileDatabaseInitialized) return;
+
+        tileAssetsByName = new Dictionary<string, TileBase>();
+        
+        // Ambil SEMUA tile yang Anda referensikan di skrip ini
+        TileBase[] allTiles = {
+            hiddenInteractableTile, plowedTile, wetPlowedTile, seededTile,
+            wetSeededTile, sproutTile, wetSproutTile, growthDay2Dry,
+            growthDay2Wet, growthDay3Dry, growthDay3Wet, matureTile
+        };
+
+        foreach (TileBase tile in allTiles)
+        {
+            if (tile != null && !tileAssetsByName.ContainsKey(tile.name))
+            {
+                tileAssetsByName.Add(tile.name, tile);
+            }
+        }
+        isTileDatabaseInitialized = true;
+        Debug.Log($"[TileManager] Database tile diinisialisasi dengan {tileAssetsByName.Count} tile unik.");
+    }
     
+    public List<TileState> GetChangedTileData()
+    {
+        if (!isTileDatabaseInitialized) InitializeTileDatabase();
+
+        List<TileState> data = new List<TileState>();
+        BoundsInt bounds = interactableTile.cellBounds;
+
+        for (int x = bounds.xMin; x < bounds.xMax; x++)
+        {
+            for (int y = bounds.yMin; y < bounds.yMax; y++)
+            {
+                Vector3Int pos = new Vector3Int(x, y, 0);
+                TileBase tile = interactableTile.GetTile(pos);
+
+                // Hanya simpan jika petak BUKAN default
+                if (tile != null && tile.name != hiddenInteractableTile.name)
+                {
+                    data.Add(new TileState { position = pos, tileName = tile.name });
+                }
+            }
+        }
+        return data;
+    }
+
+    // Fungsi untuk MENERAPKAN data petak (untuk di-load)
+    public void LoadTileData(List<TileState> data)
+    {
+        if (!isTileDatabaseInitialized) InitializeTileDatabase();
+        
+        // 1. Bersihkan seluruh tilemap kembali ke default
+        BoundsInt bounds = interactableTile.cellBounds;
+        for (int x = bounds.xMin; x < bounds.xMax; x++)
+        {
+            for (int y = bounds.yMin; y < bounds.yMax; y++)
+            {
+                interactableTile.SetTile(new Vector3Int(x, y, 0), hiddenInteractableTile);
+            }
+        }
+
+        // 2. Terapkan data yang tersimpan
+        if (data == null) return;
+        
+        foreach (var state in data)
+        {
+            if (tileAssetsByName.TryGetValue(state.tileName, out TileBase tile))
+            {
+                interactableTile.SetTile(state.position, tile);
+            }
+        }
+        Debug.Log($"[SaveData] Berhasil load {data.Count} state petak.");
+    }
+
     // Helper untuk Player.cs
     public string GetHiddenTileName() { return GetTileName(hiddenInteractableTile); }
     public string GetPlowedTileName() { return GetTileName(plowedTile); }

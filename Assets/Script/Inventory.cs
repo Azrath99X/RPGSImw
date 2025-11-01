@@ -12,6 +12,8 @@ public class Inventory
         public string itemName;
         public int count;
         public int maxCount;
+        
+        [System.NonSerialized]
         public Sprite icon;
 
         public Slot()
