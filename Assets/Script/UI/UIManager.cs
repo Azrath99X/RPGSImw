@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
@@ -16,7 +17,9 @@ public class UIManager : MonoBehaviour
     public static Image draggedImage;
     public static bool dragAll; 
 
-    
+    [Header("Pause Menu")]
+    public GameObject pauseMenuPanel; // Seret Panel UI Anda ke sini
+    private bool isPaused = false;    
     
     private void Awake()
     {
@@ -25,6 +28,8 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         inventoryPanel.SetActive(false);
+        if (pauseMenuPanel != null)
+            pauseMenuPanel.SetActive(false);
     }
     
     public void Update()
@@ -40,6 +45,12 @@ public class UIManager : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.LeftControl))
         {
             dragAll = false;
+        }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            isPaused = !isPaused;
+            if (pauseMenuPanel != null)
+                pauseMenuPanel.SetActive(isPaused);
         }
     }
     
@@ -95,5 +106,32 @@ public class UIManager : MonoBehaviour
         }
         Debug.LogError("Inventory UI not found: " + name);
         return null;
+    }
+
+    public void PauseGame()
+    {
+        isPaused = true;
+        if (pauseMenuPanel != null)
+            pauseMenuPanel.SetActive(true);
+
+        // Hentikan waktu di dalam game (ini akan menghentikan 'FixedUpdate' di Movement.cs)
+        Time.timeScale = 0f;
+    }
+
+    public void ResumeGame()
+    {
+        isPaused = false;
+        if (pauseMenuPanel != null)
+            pauseMenuPanel.SetActive(false);
+
+        // Lanjutkan waktu di dalam game
+        Time.timeScale = 1f;
+    }
+    
+    public void GoToMainMenu()
+    {
+        // PENTING: Selalu kembalikan Time.timeScale ke 1 sebelum pindah scene
+        Time.timeScale = 1f; 
+        SceneManager.LoadScene("MainMenu"); // Ganti "MainMenu" dengan nama scene Main Menu Anda
     }
 }

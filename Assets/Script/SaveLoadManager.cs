@@ -137,10 +137,6 @@ public class SaveLoadManager : MonoBehaviour
         
         storyManager.trustAir = currentSaveData.trustAir;
         storyManager.trustXylem = currentSaveData.trustXylem;
-
-        // --- GANTI BARIS-BARIS INI ---
-        // inventoryManager.backpack = currentSaveData.backpackData;
-        // inventoryManager.toolbar = currentSaveData.toolbarData;
         
         // --- DENGAN YANG INI ---
         inventoryManager.LoadInventories(currentSaveData.backpackData, currentSaveData.toolbarData);
@@ -175,10 +171,12 @@ public class SaveLoadManager : MonoBehaviour
             Debug.LogWarning("SaveLoadManager: Tidak dapat menemukan UI.instance.toolbarUi untuk me-refresh slot!");
         }
     }
-    
+
     // Cek apakah ada file save
     public bool HasSaveFile()
     {
         return File.Exists(saveFilePath);
     }
+    
+    
 }

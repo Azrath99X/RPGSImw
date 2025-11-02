@@ -9,6 +9,7 @@ public class DialogueManager : MonoBehaviour
 {
     public static DialogueManager Instance { get; private set; }
     public bool IsDialogueActive { get; private set; }
+    public bool IsDisplayingChoices { get; private set; }
 
     [Header("UI Components")]
     public GameObject dialogueBox; // Panel utama UI dialog
@@ -24,7 +25,9 @@ public class DialogueManager : MonoBehaviour
     [Header("UI to Toggle")]
     [Tooltip("Seret GameObject UI Toolbar Anda ke sini")]
     public List<GameObject> uiElementsToHide; // <-- GUNAKAN INI
-    
+
+
+
     
 
     void Awake()
@@ -44,6 +47,7 @@ public class DialogueManager : MonoBehaviour
     {
         dialogueBox.SetActive(false);
         IsDialogueActive = false; 
+        IsDisplayingChoices = false;
     }
     
     // Panggil ini untuk memulai percakapan
@@ -152,6 +156,7 @@ public class DialogueManager : MonoBehaviour
         // Cek jika ada pilihan 
         if (currentConversation.playerChoices.Length > 0)
         {
+            IsDisplayingChoices = true;
             for (int i = 0; i < currentConversation.playerChoices.Length; i++)
             {
                 GameObject buttonGO = Instantiate(choiceButtonPrefab, choiceButtonContainer);
@@ -167,6 +172,7 @@ public class DialogueManager : MonoBehaviour
 
             // --- HAPUS INI ---
             // currentConversation.onConversationEnd?.Invoke();
+            IsDisplayingChoices = false;
             
             // --- LOGIKA BARU DI SINI ---
             TriggerConversationEndEvents(currentConversation);
@@ -186,6 +192,7 @@ public class DialogueManager : MonoBehaviour
 
     private void SelectChoice(PlayerChoice choice)
     {
+        IsDisplayingChoices = false;
         // Hapus tombol pilihan
         foreach (Transform child in choiceButtonContainer)
         {
@@ -237,7 +244,7 @@ public class DialogueManager : MonoBehaviour
         if (conversation.itemToGiveOnEnd != null)
         {
             Inventory playerBackpack = GameManager.Instance.player.inventory.backpack;
-            
+
             // Debug info to help identify inventory space issues
             int emptySlots = 0;
             int totalSlots = playerBackpack.slots.Count;
@@ -245,9 +252,9 @@ public class DialogueManager : MonoBehaviour
             {
                 if (slot.isEmpty) emptySlots++;
             }
-            
+
             Debug.Log($"Attempting to add {conversation.itemGiveAmount}x {conversation.itemToGiveOnEnd.itemName}. Backpack: {emptySlots}/{totalSlots} empty slots");
-            
+
             // Check if there's enough space before adding
             if (playerBackpack.CanAdd(conversation.itemToGiveOnEnd, conversation.itemGiveAmount))
             {
@@ -259,14 +266,46 @@ public class DialogueManager : MonoBehaviour
                 Debug.LogWarning($"Cannot add {conversation.itemGiveAmount}x {conversation.itemToGiveOnEnd.itemName} - insufficient inventory space!");
                 // TODO: Show UI message to player about full inventory
             }
+
+
         }
-        
-        // 3. Panggil Trigger Ending (jika ini akhir cerita)
-        // (Anda bisa menambahkan bool 'triggersEnding' ke DialogueConversation)
-        // if (conversation.triggersEnding)
-        // {
-        //     StoryManager.Instance.TriggerEnding();
-        // }
+        if (!string.IsNullOrEmpty(conversation.characterToActivateOnEnd))
+        {
+            // --- GANTI BLOK INI ---
+            // TimeManager.Instance.SetCharacterActive(conversation.characterToActivateOnEnd, true);
+
+            // --- MENJADI BLOK INI ---
+            if (conversation.useFadeForActivation)
+            {
+                // Panggil fungsi FADE baru di TimeManager
+                TimeManager.Instance.ActivateCharacterWithFade(conversation.characterToActivateOnEnd);
+            }
+            else
+            {
+                // Gunakan cara instan yang lama
+                TimeManager.Instance.SetCharacterActive(conversation.characterToActivateOnEnd, true);
+            }
+            // ---------------------
+        }
+        // 4. Non-aktifkan Karakter
+        if (!string.IsNullOrEmpty(conversation.characterToDeactivateOnEnd))
+        {
+            // --- GANTI BLOK INI ---
+            // TimeManager.Instance.SetCharacterActive(conversation.characterToDeactivateOnEnd, false);
+
+            // --- MENJADI BLOK INI ---
+            if (conversation.useFadeForDeactivation)
+            {
+                // Panggil fungsi FADE baru di TimeManager
+                TimeManager.Instance.DeactivateCharacterWithFade(conversation.characterToDeactivateOnEnd);
+            }
+            else
+            {
+                // Gunakan cara instan yang lama
+                TimeManager.Instance.SetCharacterActive(conversation.characterToDeactivateOnEnd, false);
+
+            }
+        }
     }
 
     private void EndConversation()

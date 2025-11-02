@@ -61,6 +61,7 @@
     <Compile Include="Assets\Script\GameManager.cs" />
     <Compile Include="Assets\Script\DialogueManager.cs" />
     <Compile Include="Assets\Script\scriptableObjects\ItemData.cs" />
+    <Compile Include="Assets\Script\MainMenu.cs" />
     <Compile Include="Assets\Script\UI\QuestEntry_Ui.cs" />
     <Compile Include="Assets\Script\NPC\DialogueTrigger.cs" />
     <Compile Include="Assets\Script\InventoryManager.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="Assets\Script\Collectible.cs" />
     <Compile Include="Assets\Script\NPC\ConditionalDialogueTrigger.cs" />
     <Compile Include="Assets\Script\SaveData.cs" />
+    <Compile Include="Assets\Script\EndingScreen.cs" />
     <Compile Include="Assets\Script\scriptableObjects\Quest.cs" />
     <Compile Include="Assets\Script\InteractiveObject\Object_NPC.cs" />
     <Compile Include="Assets\Script\UI\QuestLog_Ui.cs" />

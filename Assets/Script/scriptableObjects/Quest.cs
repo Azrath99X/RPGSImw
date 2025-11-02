@@ -9,6 +9,9 @@ public class Quest : ScriptableObject
     [TextArea(3, 5)]
     public string description;
 
+    [Tooltip("Jika false, tidak akan memicu notifikasi pop-up")]
+    public bool showInNotifier = true; 
+
     public bool isComplete = false;
     // Anda bisa tambahkan 'Rewards' di sini nanti
 }

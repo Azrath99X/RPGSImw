@@ -29,22 +29,32 @@ public class QuestManager : MonoBehaviour
         if (GetQuestStatus(quest.questID) != QuestStatus.NotStarted) return;
         
         Debug.Log("QUEST BARU DIMULAI: " + quest.questName);
-        quest.isComplete = false; // Pastikan disetel ulang
+        quest.isComplete = false; 
         activeQuests.Add(quest);
-        // Panggil UI Quest Log di sini
 
-        OnQuestStarted?.Invoke(quest);
+        if (quest.showInNotifier)
+        {
+            OnQuestStarted?.Invoke(quest);
+        }
     }
 
     // Fungsi baru untuk menyelesaikan quest dengan ASET
     public void CompleteQuest(Quest quest)
     {
         if (quest == null || !activeQuests.Contains(quest)) return;
-        
+
         Debug.Log("QUEST SELESAI: " + quest.questName);
         quest.isComplete = true;
         activeQuests.Remove(quest);
         completedQuests.Add(quest);
+    }
+    
+    void Update()
+    {
+        // Hentikan pengecekan jika quest "GetTools" sudah tidak aktif lagi
+        if (GetQuestStatus("GetTools") != QuestStatus.Active) return;
+
+        CheckToolQuestCompletion();
     }
     
     // Fungsi baru untuk menyelesaikan quest dengan ID (untuk event eksternal)
@@ -70,7 +80,7 @@ public class QuestManager : MonoBehaviour
         }
         return QuestStatus.NotStarted;
     }
-    
+
     // TODO: Tambahkan fungsi untuk mengecek penyelesaian quest otomatis
     // (Misal: Panggil ini setelah item diambil)
     public void CheckToolQuestCompletion()
@@ -86,32 +96,58 @@ public class QuestManager : MonoBehaviour
                 }
             }
         }
+
     }
+    
+    public void CheckPlantingQuestCompletion()
+    {
+        // Ganti "PlantCrops" dengan ID Quest menanam Anda
+        if (GetQuestStatus("PlantCrops") == QuestStatus.Active)
+        {
+            // Logika pengecekan
+            // Untuk quest ini, kita asumsikan quest selesai
+            // HANYA DENGAN MENANAM 1x.
+
+            // Jika Anda perlu mengecek apakah 5 tanaman sudah ditanam,
+            // Anda perlu melacaknya di TileManager atau PlayerStats.
+
+            // Untuk saat ini, kita anggap menanam 1x sudah cukup.
+            Debug.Log("Mengecek quest menanam... Selesai!");
+            CompleteQuestByID("PlantCrops");
+        }
+        
+        if (GetQuestStatus("D2_Task") == QuestStatus.Active)
+        {
+            CompleteQuestByID("D2_Task");
+            Debug.Log("[QuestManager] Quest 'D2_Task' (Day 2) telah selesai!");
+        }
+    }
+
 
     public void LoadQuestData(List<string> activeIDs, List<string> completedIDs)
-{
-    activeQuests.Clear();
-    completedQuests.Clear();
-
-    foreach (string id in activeIDs)
     {
-        Quest q = allQuestsInGame.Find(quest => quest.questID == id);
-        if (q != null)
-        {
-            q.isComplete = false; // Pastikan statusnya benar
-            activeQuests.Add(q);
-        }
-    }
+        activeQuests.Clear();
+        completedQuests.Clear();
 
-    foreach (string id in completedIDs)
-    {
-        Quest q = allQuestsInGame.Find(quest => quest.questID == id);
-        if (q != null)
+        foreach (string id in activeIDs)
         {
-            q.isComplete = true; // Pastikan statusnya benar
-            completedQuests.Add(q);
+            Quest q = allQuestsInGame.Find(quest => quest.questID == id);
+            if (q != null)
+            {
+                q.isComplete = false; // Pastikan statusnya benar
+                activeQuests.Add(q);
+            }
         }
+
+        foreach (string id in completedIDs)
+        {
+            Quest q = allQuestsInGame.Find(quest => quest.questID == id);
+            if (q != null)
+            {
+                q.isComplete = true; // Pastikan statusnya benar
+                completedQuests.Add(q);
+            }
+        }
+        Debug.Log($"[SaveData] Berhasil load {activeQuests.Count} quest aktif dan {completedQuests.Count} quest selesai.");
     }
-    Debug.Log($"[SaveData] Berhasil load {activeQuests.Count} quest aktif dan {completedQuests.Count} quest selesai.");
-}
 }

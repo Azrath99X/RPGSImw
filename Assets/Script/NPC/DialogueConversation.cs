@@ -57,4 +57,16 @@ public class DialogueConversation : ScriptableObject
     public Quest questToStartOnEnd;
     public ItemData itemToGiveOnEnd; // Pastikan 'Item' adalah ScriptableObject
     public int itemGiveAmount = 1; // Opsional
+
+    [Tooltip("Abaikan jika kosong. Masukkan nama persis (e.g., 'Xylem')")]
+    public string characterToActivateOnEnd;
+    [Tooltip("Abaikan jika kosong. Masukkan nama persis (e.g., 'Air')")]
+    public string characterToDeactivateOnEnd;
+
+    [Tooltip("Jika true, akan menggunakan fade hitam saat menonaktifkan karakter")]
+    public bool useFadeForDeactivation = false;
+
+    [Tooltip("Jika true, akan menggunakan fade hitam saat mengaktifkan karakter")]
+    public bool useFadeForActivation = false;
+    
 }

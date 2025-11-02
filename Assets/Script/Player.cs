@@ -128,30 +128,44 @@ public class Player : MonoBehaviour
                 bool success = tileManager.PlantSeed(lastTargetGridPos);
                 if (success)
                 {
-                    // TODO: Kurangi benih dari inventory
+                    QuestManager.Instance.CheckPlantingQuestCompletion();
                 }
             }
         }
     }
 
+    // Di dalam Script/Player.cs
+
     private void HandleInteractInput()
     {
         if (ExplorationModeManager.Instance != null && ExplorationModeManager.Instance.IsExploring)
-    {
-        return;
-    }
-        // Interaksi Tombol F untuk objek IInteractable
+        {
+            return;
+        }
+
+        // 1. Logika untuk MELANJUTKAN DIALOG (Tombol F atau Klik Kiri)
+        if (DialogueManager.Instance != null && DialogueManager.Instance.IsDialogueActive)
+        {
+            // --- MODIFIKASI BLOK INI ---
+            // Cek tombol F (selalu berfungsi)
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                DialogueManager.Instance.AdvanceConversation();
+            }
+            // Cek Klik Kiri (HANYA jika tidak ada pilihan di layar)
+            else if (Input.GetMouseButtonDown(0) && !DialogueManager.Instance.IsDisplayingChoices)
+            {
+                DialogueManager.Instance.AdvanceConversation();
+            }
+            // --- AKHIR MODIFIKASI ---
+            
+            return; // Hentikan fungsi di sini
+        }
+
+        // 2. Logika untuk MEMULAI INTERAKSI BARU (Hanya Tombol F)
+        // Ini hanya berjalan jika dialog TIDAK aktif
         if (Input.GetKeyDown(KeyCode.F))
         {
-            // Cek dulu apakah dialog sedang berjalan
-            if (DialogueManager.Instance != null && DialogueManager.Instance.IsDialogueActive)
-            {
-                // Jika ya, lanjutkan dialognya
-                DialogueManager.Instance.AdvanceConversation();
-                return; // Hentikan fungsi di sini
-            }
-
-            // Jika dialog tidak berjalan, baru cari interaksi baru
             Transform closest = null;
             float ClosestDistance = Mathf.Infinity;
             Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, interactionRange);
@@ -171,10 +185,13 @@ public class Player : MonoBehaviour
             }
             if (closest == null) return;
 
-            closest.GetComponent<IInteractable>().Interact(); 
+            closest.GetComponent<IInteractable>().Interact();
         }
+
+        // --- AKHIR MODIFIKASI ---
     }
-    // --- Fungsi Drop Item ---
+
+        
     public void dropItem(Item item)
     {
         Vector2 spawnLocation = transform.position;

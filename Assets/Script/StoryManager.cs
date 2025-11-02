@@ -12,6 +12,10 @@ public class StoryManager : MonoBehaviour
     public int trustAir = 0;
     public int trustXylem = 0;
 
+    public bool talkedToDestaDay1 = false;
+
+    public bool knowsStorageSecretD2 = false;
+
     void Awake()
     {
         if (Instance != null && Instance != this) Destroy(gameObject);
@@ -49,7 +53,7 @@ public class StoryManager : MonoBehaviour
         }
         else
         {
-            SceneManager.LoadScene("Ending_Neutral"); // Ganti nama scene
+            SceneManager.LoadScene("Ending"); // Ganti nama scene
         }
     }
 }

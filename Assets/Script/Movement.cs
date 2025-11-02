@@ -24,6 +24,14 @@ public class Movement : MonoBehaviour
 
     void Update()
     {
+
+        if (DialogueManager.Instance != null && DialogueManager.Instance.IsDialogueActive)
+        {
+            direction = Vector3.zero; // Set pergerakan ke nol
+            animator.SetFloat("Speed", 0); // Paksa animasi idle
+            return; // Lewati sisa fungsi Update
+        }
+
         // --- Input ---
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
@@ -57,6 +65,13 @@ public class Movement : MonoBehaviour
     private void FixedUpdate()
     {
         // Adjust speed based on whether the player is sprinting
+        if (DialogueManager.Instance != null && DialogueManager.Instance.IsDialogueActive)
+        {
+            direction = Vector3.zero; // Set pergerakan ke nol
+            animator.SetFloat("Speed", 0); // Paksa animasi idle
+            return; // Lewati sisa fungsi Update
+        }
+        
         float currentSpeed = isSprinting ? speed * sprintMultiplier : speed;
 
         // Move the player
